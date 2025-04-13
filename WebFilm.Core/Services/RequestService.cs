@@ -62,8 +62,8 @@ namespace WebFilm.Core.Services
             // Validate status
             if (string.IsNullOrEmpty(responseDTO.status) || 
                 (!responseDTO.status.Equals("PENDING") && 
-                 !responseDTO.status.Equals("PROCESSING") && 
-                 !responseDTO.status.Equals("RESOLVED")))
+                 !responseDTO.status.Equals("APPROVED") && 
+                 !responseDTO.status.Equals("REJECTED")))
             {
                 throw new ServiceException("Trạng thái không hợp lệ");
             }
