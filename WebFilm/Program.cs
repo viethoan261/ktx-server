@@ -36,6 +36,9 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<ISecurityVisitRepository, SecurityVisitRepository>();
 builder.Services.AddScoped<ISecurityVisitService, SecurityVisitService>();
 
+builder.Services.AddScoped<IMaintenanceTaskRepository, MaintenanceTaskRepository>();
+builder.Services.AddScoped<IMaintenanceTaskService, MaintenanceTaskService>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserContext, UserContext>();
 
