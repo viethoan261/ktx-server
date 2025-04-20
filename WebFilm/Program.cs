@@ -52,6 +52,9 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IVNPayService, VNPayService>();
 
+// Add Statistics service
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
+
 // Configure VNPay settings
 builder.Services.Configure<VNPayConfig>(builder.Configuration.GetSection("VNPay"));
 
