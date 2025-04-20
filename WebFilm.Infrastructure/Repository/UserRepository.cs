@@ -205,7 +205,7 @@ namespace WebFilm.Infrastructure.Repository
             using (SqlConnection = new MySqlConnection(_connectionString))
             {
                 var sqlCommand = @"
-                    SELECT u.id, u.username, u.password, u.fullname, u.email, u.phone, r.roomNumber
+                    SELECT u.id, u.username, u.password, u.fullname, u.email, u.phone, rs.roomId, r.roomNumber
                     FROM Users u
                     LEFT JOIN room_student rs ON u.id = rs.studentId
                     LEFT JOIN rooms r ON rs.roomId = r.id
@@ -291,6 +291,95 @@ namespace WebFilm.Infrastructure.Repository
                 
                 SqlConnection.Close();
                 return null;
+            }
+        }
+
+        public bool AssignRoomToStudent(int studentId, int roomId)
+        {
+            using (SqlConnection = new MySqlConnection(_connectionString))
+            {
+                SqlConnection.Open();
+                using (var transaction = SqlConnection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Check if the student exists and is a student
+                        var student = SqlConnection.QueryFirstOrDefault<Users>(
+                            "SELECT * FROM Users WHERE id = @v_StudentId AND role = 'STUDENT'", 
+                            new { v_StudentId = studentId }, 
+                            transaction);
+                        
+                        if (student == null)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                        
+                        // Check if the room exists
+                        var room = SqlConnection.QueryFirstOrDefault<dynamic>(
+                            "SELECT * FROM rooms WHERE id = @v_RoomId", 
+                            new { v_RoomId = roomId }, 
+                            transaction);
+                        
+                        if (room == null)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                        
+                        // Check if the room has space (current occupancy < max occupancy)
+                        if (room.currentOccupancy >= room.maxOccupancy)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                        
+                        // Check if student already has a room assignment
+                        var existingAssignment = SqlConnection.QueryFirstOrDefault<dynamic>(
+                            "SELECT * FROM room_student WHERE studentId = @v_StudentId", 
+                            new { v_StudentId = studentId }, 
+                            transaction);
+                        
+                        // If student has an existing room assignment, delete it
+                        if (existingAssignment != null)
+                        {
+                            SqlConnection.Execute(
+                                "DELETE FROM room_student WHERE studentId = @v_StudentId", 
+                                new { v_StudentId = studentId }, 
+                                transaction);
+                            
+                            // Decrease the current occupancy of the previous room
+                            SqlConnection.Execute(
+                                "UPDATE rooms SET currentOccupancy = currentOccupancy - 1 WHERE id = @v_RoomId", 
+                                new { v_RoomId = existingAssignment.roomId }, 
+                                transaction);
+                        }
+                        
+                        // Add new room assignment
+                        SqlConnection.Execute(
+                            "INSERT INTO room_student (roomId, studentId, createdDate, modifiedDate) VALUES (@v_RoomId, @v_StudentId, NOW(), NOW())", 
+                            new { v_RoomId = roomId, v_StudentId = studentId }, 
+                            transaction);
+                        
+                        // Increase the current occupancy of the new room
+                        SqlConnection.Execute(
+                            "UPDATE rooms SET currentOccupancy = currentOccupancy + 1 WHERE id = @v_RoomId", 
+                            new { v_RoomId = roomId }, 
+                            transaction);
+                        
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                    finally
+                    {
+                        SqlConnection.Close();
+                    }
+                }
             }
         }
 

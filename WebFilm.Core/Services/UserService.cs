@@ -196,7 +196,6 @@ namespace WebFilm.Core.Services
         {
             try
             {
-                // Check if user exists
                 var existingUser = _userRepository.GetUserByID(id);
                 if (existingUser == null)
                 {
@@ -231,6 +230,42 @@ namespace WebFilm.Core.Services
                     throw;
                 }
                 throw new ServiceException($"Lỗi khi cập nhật sinh viên: {ex.Message}");
+            }
+        }
+        
+        public bool AssignRoomToStudent(int studentId, int roomId)
+        {
+            try
+            {
+                // Check if student exists
+                var student = _userRepository.GetUserByID(studentId);
+                if (student == null)
+                {
+                    throw new ServiceException("Sinh viên không tồn tại");
+                }
+
+                // Check if the user is a student
+                if (!"STUDENT".Equals(student.role))
+                {
+                    throw new ServiceException("Người dùng này không phải là sinh viên");
+                }
+
+                // Perform the room assignment
+                var result = _userRepository.AssignRoomToStudent(studentId, roomId);
+                if (!result)
+                {
+                    throw new ServiceException("Gán phòng cho sinh viên thất bại. Vui lòng kiểm tra xem phòng đã đầy chưa hoặc phòng không tồn tại.");
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ex is ServiceException)
+                {
+                    throw;
+                }
+                throw new ServiceException($"Lỗi khi gán phòng cho sinh viên: {ex.Message}");
             }
         }
         #endregion

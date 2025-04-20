@@ -20,6 +20,8 @@ namespace WebFilm.Core.Enitites.User
         
         public string phone { get; set; }
         
+        public int? roomId { get; set; }
+        
         public string roomNumber { get; set; }
     }
 } 

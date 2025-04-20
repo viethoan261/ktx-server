@@ -29,5 +29,7 @@ namespace WebFilm.Core.Interfaces.Repository
         bool DeleteUserWithRoomAssignments(int userId);
         
         Users UpdateStudent(int id, UpdateStudentDTO studentDTO);
+
+        bool AssignRoomToStudent(int studentId, int roomId);
     }
 }

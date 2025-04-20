@@ -159,6 +159,20 @@ namespace WebFilm.Controllers
             }
         }
 
+        [HttpPost("students/{studentId}/assign-room")]
+        public IActionResult AssignRoomToStudent(int studentId, [FromBody] int roomId)
+        {
+            try
+            {
+                var result = _userService.AssignRoomToStudent(studentId, roomId);
+                return Ok(new { success = result, message = "Gán phòng cho sinh viên thành công" });
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
         [HttpPut("students/{id}")]
         public IActionResult UpdateStudent(int id, UpdateStudentDTO studentDTO)
         {

@@ -28,6 +28,8 @@ namespace WebFilm.Core.Interfaces.Services
         List<StudentResponseDTO> GetAllStudentsWithRoomInfo();
 
         Users UpdateStudent(int id, UpdateStudentDTO studentDTO);
+        
+        bool AssignRoomToStudent(int studentId, int roomId);
 
         /*List<StudentResponse> getAllStudents(int semesterId, String className);*/
     }
