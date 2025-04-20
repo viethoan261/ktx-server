@@ -16,6 +16,163 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `maintenance_tasks`
+--
+
+DROP TABLE IF EXISTS `maintenance_tasks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `maintenance_tasks` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `taskType` varchar(20) NOT NULL COMMENT 'MAINTENANCE or CLEANING',
+  `title` varchar(255) NOT NULL,
+  `description` text,
+  `location` varchar(100) NOT NULL,
+  `scheduledDate` datetime NOT NULL,
+  `completedDate` datetime DEFAULT NULL,
+  `status` varchar(20) NOT NULL COMMENT 'SCHEDULED, IN_PROGRESS, COMPLETED, CANCELLED',
+  `priority` varchar(20) NOT NULL COMMENT 'LOW, MEDIUM, HIGH, URGENT',
+  `assignedTo` varchar(255) DEFAULT NULL,
+  `notes` text,
+  `createdDate` datetime DEFAULT NULL,
+  `modifiedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `maintenance_tasks`
+--
+
+LOCK TABLES `maintenance_tasks` WRITE;
+/*!40000 ALTER TABLE `maintenance_tasks` DISABLE KEYS */;
+INSERT INTO `maintenance_tasks` VALUES (1,'CLEANING','Dọn vệ sinh tầng 3','Dọn vệ sinh tầng 3','Tầng 3','2025-04-19 05:05:41','2025-04-19 20:22:56','COMPLETED','MEDIUM','Nguyễn Thị A','Vệ sinh tầng 3 nhé','2025-04-19 19:06:16','2025-04-19 20:22:55'),(2,'MAINTENANCE','s','s','sss','2025-04-19 13:23:39',NULL,'CANCELLED','HIGH','ss','ss','2025-04-19 20:23:53','2025-04-19 20:27:03');
+/*!40000 ALTER TABLE `maintenance_tasks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification_reads`
+--
+
+DROP TABLE IF EXISTS `notification_reads`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notification_reads` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `notification_id` int NOT NULL,
+  `read_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification_reads`
+--
+
+LOCK TABLES `notification_reads` WRITE;
+/*!40000 ALTER TABLE `notification_reads` DISABLE KEYS */;
+INSERT INTO `notification_reads` VALUES (1,1,1,'2025-04-19 12:54:24'),(2,7,1,'2025-04-19 12:54:37'),(3,1,2,'2025-04-19 13:07:49'),(4,1,3,'2025-04-19 13:10:27'),(5,7,3,'2025-04-19 13:16:15'),(6,7,2,'2025-04-19 13:16:18'),(7,8,2,'2025-04-20 11:05:37');
+/*!40000 ALTER TABLE `notification_reads` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notifications` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `type` varchar(20) NOT NULL COMMENT 'INTERNAL or EMERGENCY',
+  `status` varchar(20) NOT NULL DEFAULT 'ACTIVE' COMMENT 'ACTIVE or INACTIVE',
+  `publishDate` datetime DEFAULT NULL,
+  `expiryDate` datetime DEFAULT NULL,
+  `createdBy` int DEFAULT NULL,
+  `createdDate` datetime DEFAULT NULL,
+  `modifiedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+INSERT INTO `notifications` VALUES (1,'Thay đổi giờ đóng cửa KTX ss','từ ngày 20/4, sẽ đóng cửa KTX vào 10h thay vì 10h30 như cũ','internal','active','2025-04-18 14:31:18','2026-05-18 03:00:00',1,'2025-04-19 11:32:23','2025-04-19 12:31:21'),(2,'Test','test','emergency','active','2025-04-06 17:00:00','2025-05-28 17:00:00',1,'2025-04-19 12:58:53','2025-04-19 12:58:53');
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order`
+--
+
+DROP TABLE IF EXISTS `order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `studentId` int NOT NULL,
+  `roomId` int NOT NULL,
+  `electricity` decimal(10,2) NOT NULL,
+  `water` decimal(10,2) NOT NULL,
+  `service` decimal(10,2) NOT NULL,
+  `room` decimal(10,2) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `status` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pending',
+  `electricNumberPerMonth` decimal(10,2) NOT NULL,
+  `waterNumberPerMonth` decimal(10,2) NOT NULL,
+  `createdDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modifiedDate` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order`
+--
+
+LOCK TABLES `order` WRITE;
+/*!40000 ALTER TABLE `order` DISABLE KEYS */;
+INSERT INTO `order` VALUES (9,7,5,200000.00,120000.00,200000.00,200000.00,720000.00,'Paid',20.00,30.00,'2025-04-20 11:23:58','2025-04-20 11:24:52'),(10,8,6,100000.00,60000.00,200000.00,200000.00,560000.00,'Paid',10.00,15.00,'2025-04-20 11:23:58','2025-04-20 11:24:04');
+/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `price`
+--
+
+DROP TABLE IF EXISTS `price`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `price` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `electricityPrice` decimal(10,2) NOT NULL,
+  `waterPrice` decimal(10,2) NOT NULL,
+  `servicePrice` decimal(10,2) NOT NULL,
+  `roomPrice` decimal(10,2) NOT NULL,
+  `createdDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modifiedDate` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `price`
+--
+
+LOCK TABLES `price` WRITE;
+/*!40000 ALTER TABLE `price` DISABLE KEYS */;
+INSERT INTO `price` VALUES (7,10000.00,4000.00,200000.00,200000.00,'2025-04-19 22:18:29','2025-04-19 22:18:29');
+/*!40000 ALTER TABLE `price` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `requests`
 --
 
@@ -34,7 +191,7 @@ CREATE TABLE `requests` (
   `modifiedDate` datetime NOT NULL,
   `resolvedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +200,7 @@ CREATE TABLE `requests` (
 
 LOCK TABLES `requests` WRITE;
 /*!40000 ALTER TABLE `requests` DISABLE KEYS */;
-INSERT INTO `requests` VALUES (1,4,'string','string','REQUEST','PENDING',NULL,'2025-04-13 11:48:48','2025-04-13 11:48:48',NULL);
+INSERT INTO `requests` VALUES (3,7,'Sửa lại bóng đèn','Sửa lại bóng đèn nhà vệ sinh phòng 101','REQUEST','APPROVED','ngày 15 bên dịch vụ sẽ xuống kiểm tra','2025-04-13 21:57:38','2025-04-13 22:22:00',NULL),(4,7,'phòng 102 rất ồn','ồn','COMPLAINT','REJECTED','đang sửa nên sẽ ồn','2025-04-13 22:22:50','2025-04-13 22:23:10',NULL),(5,1,'Test nha','aaaa','COMPLAINT','REJECTED','aaaaa','2025-04-19 10:54:18','2025-04-19 10:54:27',NULL);
 /*!40000 ALTER TABLE `requests` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +218,7 @@ CREATE TABLE `room_student` (
   `createdDate` datetime DEFAULT NULL,
   `modifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +227,7 @@ CREATE TABLE `room_student` (
 
 LOCK TABLES `room_student` WRITE;
 /*!40000 ALTER TABLE `room_student` DISABLE KEYS */;
-INSERT INTO `room_student` VALUES (15,3,2,'2025-04-12 23:36:56','2025-04-12 23:36:56'),(16,3,4,'2025-04-12 23:36:56','2025-04-12 23:36:56');
+INSERT INTO `room_student` VALUES (17,5,7,'2025-04-13 21:56:14','2025-04-13 21:56:14'),(18,6,8,'2025-04-19 23:13:22','2025-04-19 23:13:22');
 /*!40000 ALTER TABLE `room_student` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +248,7 @@ CREATE TABLE `rooms` (
   `createdDate` datetime DEFAULT NULL,
   `modifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,8 +257,73 @@ CREATE TABLE `rooms` (
 
 LOCK TABLES `rooms` WRITE;
 /*!40000 ALTER TABLE `rooms` DISABLE KEYS */;
-INSERT INTO `rooms` VALUES (3,'1','101',9,'OCCUPIED',2,'2025-04-07 22:39:41','2025-04-12 23:36:56');
+INSERT INTO `rooms` VALUES (5,'1','101',10,'OCCUPIED',1,'2025-04-13 21:56:14','2025-04-13 21:56:14'),(6,'1','102',5,'OCCUPIED',1,'2025-04-19 23:13:22','2025-04-19 23:13:22');
 /*!40000 ALTER TABLE `rooms` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `security_visit`
+--
+
+DROP TABLE IF EXISTS `security_visit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `security_visit` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `visitorName` varchar(100) NOT NULL,
+  `phoneNumber` varchar(20) NOT NULL,
+  `studentId` int DEFAULT NULL,
+  `entryTime` datetime NOT NULL,
+  `exitTime` datetime DEFAULT NULL,
+  `status` varchar(20) NOT NULL COMMENT 'CHECKED_IN or CHECKED_OUT',
+  `purpose` varchar(255) DEFAULT NULL,
+  `notes` text,
+  `createdDate` datetime DEFAULT NULL,
+  `modifiedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `security_visit`
+--
+
+LOCK TABLES `security_visit` WRITE;
+/*!40000 ALTER TABLE `security_visit` DISABLE KEYS */;
+INSERT INTO `security_visit` VALUES (1,'Nguyễn Văn Cảnh','0966789789',123123,'2025-04-19 17:32:15','2025-04-19 18:03:27','CHECKED_OUT','Thăm bạn','Thăm bạn A','2025-04-19 17:32:15','2025-04-19 18:03:26');
+/*!40000 ALTER TABLE `security_visit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transactions`
+--
+
+DROP TABLE IF EXISTS `transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `transactions` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `OrderId` varchar(50) NOT NULL,
+  `UserId` int NOT NULL,
+  `Amount` decimal(10,2) NOT NULL,
+  `PaymentMethod` varchar(50) NOT NULL,
+  `TransactionId` varchar(100) DEFAULT NULL,
+  `Status` varchar(20) NOT NULL,
+  `OrderDescription` varchar(1000) DEFAULT NULL,
+  `CreatedDate` datetime NOT NULL,
+  `CompletedDate` datetime DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transactions`
+--
+
+LOCK TABLES `transactions` WRITE;
+/*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
+INSERT INTO `transactions` VALUES (30,'9',7,720000.00,'VNPay','14916257','SUCCESS','Thanh toán hóa đơn KTX #9','2025-04-20 11:24:29','2025-04-20 11:24:52');
+/*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -123,7 +345,7 @@ CREATE TABLE `users` (
   `modifiedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +354,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','$2a$11$VE6XbFkuI3QuhWVnQOhya.nv54zIAyaEyGe5uMHjmo2W9ysE6gwXq','ADMIN','admin@gmail.com','0977867987','Quản trị hệ thống','2025-04-07 19:56:48','2025-04-07 19:56:48'),(2,'vana','$2a$11$ouW5VHD7VC.HMiMJWNLEmOI55.WFdAxyZ2Yr0Qk0pvcnpMrMZiRQm','STUDENT','vanan@gmail.com','123123123','Nguyễn Tiến An','2025-04-07 20:49:18','2025-04-12 23:32:50'),(4,'tien123','$2a$11$sINKEef7J8CqClZSHJGkSOAQki2lD8ZWvolDt1KbaplIH10fXqG22','STUDENT','tien@gmail.com','09667121332','Nguyễn Bá Tiến','2025-04-07 22:32:01','2025-04-07 22:32:01');
+INSERT INTO `users` VALUES (1,'admin','$2a$11$VE6XbFkuI3QuhWVnQOhya.nv54zIAyaEyGe5uMHjmo2W9ysE6gwXq','ADMIN','admin@gmail.com','0977867987','Quản trị hệ thống','2025-04-07 19:56:48','2025-04-07 19:56:48'),(7,'tien123','$2a$11$PTP.DEe6rbiQg0fwkE/JM.z/YbtmzvIqA.LStZA8AybIWOqBbuuQu','STUDENT','tien123@gmail.com','0988789789','Nguyễn Văn Tiến','2025-04-13 21:56:02','2025-04-13 21:56:02'),(8,'anhnb','$2a$11$IHs6OXcZAqPKQ3egpG.yAOUnqtsZVnBzajwfZZtwRe4bdl0TgupUS','STUDENT','baoanh@gmail.com','0977867898','Nguyễn Bảo Anh','2025-04-13 22:36:50','2025-04-13 22:36:50');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,4 +371,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-13 16:17:48
+-- Dump completed on 2025-04-20 11:26:05

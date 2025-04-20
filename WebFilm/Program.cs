@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using WebFilm.Core.Config;
 using WebFilm.Core.Interfaces.Repository;
 using WebFilm.Core.Interfaces.Services;
 using WebFilm.Core.Services;
@@ -19,7 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//X? l� DI
+//X? l DI
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -38,6 +39,21 @@ builder.Services.AddScoped<ISecurityVisitService, SecurityVisitService>();
 
 builder.Services.AddScoped<IMaintenanceTaskRepository, MaintenanceTaskRepository>();
 builder.Services.AddScoped<IMaintenanceTaskService, MaintenanceTaskService>();
+
+// Add Price services
+builder.Services.AddScoped<IPriceRepository, PriceRepository>();
+builder.Services.AddScoped<IPriceService, PriceService>();
+
+// Add Order services
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+// Add VNPay services
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IVNPayService, VNPayService>();
+
+// Configure VNPay settings
+builder.Services.Configure<VNPayConfig>(builder.Configuration.GetSection("VNPay"));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserContext, UserContext>();
